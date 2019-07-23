@@ -1,20 +1,26 @@
 require("dotenv").config();
 
+const http = require("http");
 const path = require("path");
 
-const morgan = require("morgan");
+const cors = require("cors");
 const express = require("express");
+const morgan = require("morgan");
+const socket = require("socket.io");
 
 const app = express();
 const router = express.Router();
+const server = http.createServer(app);
+const io = socket(server);
 
 /**
- * Settings
+ * App Config
  */
 const port = process.env.PORT || 8080;
 const nodeEnvironment = process.env.NODE_ENV || "development";
 const isProduction = nodeEnvironment === "production";
 
+app.use(cors());
 app.use(
   isProduction
     ? morgan("tiny")
@@ -22,7 +28,7 @@ app.use(
 );
 
 /**
- * Routes
+ * Routes Handler
  */
 const leaderBoardRoutes = require("./routes/leaderboard");
 
@@ -38,4 +44,14 @@ if (isProduction) {
   app.use("*", (_, res) => res.sendFile(indexPath));
 }
 
-app.listen(port, () => console.log(`Server is up, http://localhost:${port}/`));
+/**
+ * Socket Handler
+ */
+io.on("connection", socket => {
+  console.log("user connected to the server");
+  socket.emit("test");
+});
+
+server.listen(port, () =>
+  console.log(`Server is up, http://localhost:${port}/`)
+);
