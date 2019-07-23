@@ -6,10 +6,10 @@
   "author": "Pittawat Taveekitworachai",
   "license": "MIT",
   "scripts": {
-    "server": "node server/server.js",
+    "server": "nodemon server/server.js",
     "client": "cd client && yarn dev",
     "dev": "concurrently 'yarn server' 'yarn client'",
-    "start": "cd client && yarn export && cd .. && yarn server"
+    "start": "cd client && yarn export && cd .. && node server/server.js"
   },
   "dependencies": {
     "axios": "^0.19.0",

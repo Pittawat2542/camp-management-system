@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const express = require("express");
 
 const app = express();
+const router = express.Router();
 
 /**
  * Settings
@@ -25,7 +26,9 @@ app.use(
  */
 const leaderBoardRoutes = require("./routes/leaderboard");
 
-app.use("/leaderboard", leaderBoardRoutes);
+router.use(`/leaderboard`, leaderBoardRoutes);
+
+app.use("/api/v1", router);
 
 if (isProduction) {
   const indexPath = path.join(__dirname, "client", "out", "index.html");
